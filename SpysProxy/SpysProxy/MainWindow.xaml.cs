@@ -44,7 +44,7 @@ namespace SpysProxy
             _parser.OnLogResult += OnLogResult;
             StartButton.IsEnabled = false;
             StopButton.IsEnabled = true;
-            Task.Factory.StartNew(_parser.AllCountrys);
+            Task.Factory.StartNew(_parser.AllCountries);
         }
 
         private void StopButton_OnClick(object sender, RoutedEventArgs e)
