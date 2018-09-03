@@ -12,6 +12,7 @@ namespace SpysProxy
     internal class Parser
     {
         public bool Stop { private get; set; }
+        public string FileName { private get; set; }
 
         public event Action<LogItem> OnLogResult;
 
@@ -53,7 +54,7 @@ namespace SpysProxy
                 OnLogResult?.Invoke(new LogItem { Status = "Warning", Result = "Сканирование остановлено." });
                 break;
             }
-            using (var writer = File.Create("test.xlsx"))
+            using (var writer = File.Create(FileName))
             {
                 _xssf.Write(writer);
             }

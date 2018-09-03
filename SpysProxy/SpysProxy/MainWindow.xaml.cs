@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Win32;
 using SpysProxy.Infrastructure;
 
 namespace SpysProxy
@@ -10,11 +11,19 @@ namespace SpysProxy
     public partial class MainWindow
     {
         private Parser _parser;
-        private readonly ObservableCollection<LogItem> _dataItemsLog = new ObservableCollection<LogItem>();
+        private readonly ObservableCollection<LogItem> _dataItemsLog;
+        private readonly SaveFileDialog _dlg;
 
         public MainWindow()
         {
             InitializeComponent();
+            _dataItemsLog = new ObservableCollection<LogItem>();
+            _dlg = new SaveFileDialog
+            {
+                DefaultExt = ".xlsx",
+                Filter = "Text documents (.xlsx)|*.xlsx",
+                FileName = "SpysOne"
+            };
             DataGridLog.ItemsSource = _dataItemsLog;
         }
 
@@ -30,9 +39,9 @@ namespace SpysProxy
 
         private void StartButton_OnClick(object sender, RoutedEventArgs e)
         {
-            _parser = new Parser();
+            if (_dlg.ShowDialog() == false) return;
+            _parser = new Parser { Stop = false, FileName = _dlg.FileName };
             _parser.OnLogResult += OnLogResult;
-            _parser.Stop = false;
             StartButton.IsEnabled = false;
             StopButton.IsEnabled = true;
             Task.Factory.StartNew(_parser.AllCountrys);
