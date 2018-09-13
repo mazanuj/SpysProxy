@@ -66,6 +66,7 @@ namespace SpysProxy
             var html = _webClient.DownloadString(url);
             var algorithm = html.Substring(html.IndexOf("eval", StringComparison.Ordinal),
                 html.IndexOf("}))", StringComparison.Ordinal) + 3 - html.IndexOf("eval", StringComparison.Ordinal));
+            var test = ParseHelper.DoWithOutJs(algorithm);
             var htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(html);
             var htmlNodes = htmlDocument
