@@ -66,7 +66,6 @@ namespace SpysProxy
             var html = _webClient.DownloadString(url);
             var algorithm = html.Substring(html.IndexOf("eval", StringComparison.Ordinal),
                 html.IndexOf("}))", StringComparison.Ordinal) + 3 - html.IndexOf("eval", StringComparison.Ordinal));
-            var test = ParseHelper.DoWithOutJs(algorithm);
             var htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(html);
             var htmlNodes = htmlDocument
@@ -81,7 +80,8 @@ namespace SpysProxy
                 var portCrypt = htmlNode.InnerHtml.Substring(htmlNode.InnerHtml.IndexOf("\"+(", StringComparison.Ordinal) + 2,
                     htmlNode.InnerHtml.IndexOf("))<", StringComparison.Ordinal)
                     - htmlNode.InnerHtml.IndexOf("\"+(", StringComparison.Ordinal) - 1);
-                var port = ParseHelper.DoJs(algorithm, portCrypt);
+                var port = ParseHelper.DoWithOutJs(algorithm, portCrypt);
+                //var port = ParseHelper.DoJs(algorithm, portCrypt);
                 var row = _sheet.CreateRow(++_indexRow);
                 row.CreateCell(0).SetCellValue(ipAddress + ':' + port);
                 _sheet.AutoSizeColumn(0);
